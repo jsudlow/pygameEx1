@@ -17,32 +17,43 @@ class Application:
             
     def setCaption(self,caption):
         pygame.display.set_caption(caption)
-    def run(self):
-        
-        done = False
-        clock = pygame.time.Clock()
-        circle_position = [60,250] 
-        
-        while not done:
-            clock.tick(10)
-           
-            for event in pygame.event.get(): # User did something
+    def draw_screen(self):
+        self.screen.fill(WHITE)
+        pygame.draw.circle(self.screen, BLACK, [self.circle_position[0],self.circle_position[1]], 40)
+        pygame.display.flip()
+    def move_down(self,ammount):
+        self.circle_position[1] += ammount
+    def move_up(self,ammount):
+        self.circle_position[1] -= ammount
+    def move_right(self,ammount):
+        self.circle_position[0] += ammount
+    def move_left(self,ammount): 
+        self.circle_position[0] -= ammount
+    def handle_events(self):
+        for event in pygame.event.get(): # User did something
                 if event.type == pygame.QUIT: # If user clicked close
-                    done=True # Flag that we are done so we exit this loop
+                    self.done=True # Flag that we are done so we exit this loop
                 if event.type == KEYDOWN:
                     if event.key == K_DOWN:
-                        circle_position[1] += 10
+                        self.move_down(10)
                     if event.key == K_UP:
-                        circle_position[1] -= 10
+                        self.move_up(10)
                     if event.key == K_RIGHT:
-                        circle_position[0] += 10
+                        self.move_right(10)
                     if event.key == K_LEFT:
-                        circle_position[0] -= 10
-
-            self.screen.fill(WHITE)
-            pygame.draw.circle(self.screen, BLACK, [circle_position[0],circle_position[1]], 40)
-            pygame.display.flip()
+                        self.move_left(10)
+    def run(self):
+        self.done = False
+        clock = pygame.time.Clock()
+        self.circle_position = [60,250] 
+        
+        while not self.done:
+            clock.tick(10)
+            self.handle_events()
+            self.draw_screen()
+              
 
 app = Application(600,600)
 app.setCaption("Example py1.1")
 app.run()
+
