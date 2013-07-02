@@ -13,9 +13,8 @@ class Application:
     def __init__(self,screen_width,screen_height):
         self.screen_width = screen_width
         self.screen_height = screen_height
-    def init(self):
         self.screen = pygame.display.set_mode([self.screen_width,self.screen_height])
-        
+            
     def setCaption(self,caption):
         pygame.display.set_caption(caption)
     def run(self):
@@ -46,5 +45,4 @@ class Application:
 
 app = Application(600,600)
 app.setCaption("Example py1.1")
-app.init()
 app.run()
