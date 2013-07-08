@@ -40,7 +40,7 @@ class Application:
             self.draw_screen()
               
 
-class Player:
+class BaseEntity:
     def __init__(self,x,y,radius,color):
         self.x = x
         self.y = y
@@ -59,6 +59,10 @@ class Player:
     def move_left(self,ammount): 
         self.x -= ammount
 
+class Player(BaseEntity):
+    def __init__(self,x,y,radius,color):
+        BaseEntity.__init__(self,x,y,radius,color)
+    
     def handle_event(self,event):
         if event.type == KEYDOWN:
             if event.key == K_DOWN:
@@ -69,7 +73,7 @@ class Player:
                 self.move_right(10)
             if event.key == K_LEFT:
                 self.move_left(10)
-                
+
     def draw(self,screen):
         pygame.draw.circle(screen, BLACK, [self.x,self.y], self.radius)
 
