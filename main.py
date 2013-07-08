@@ -9,6 +9,7 @@ WHITE = (255, 255, 255)
 BLUE =  (  0,   0, 255)
 GREEN = (  0, 255,   0)
 RED =   (255,   0,   0)
+
 class Application:
     def __init__(self,screen_width,screen_height):
         self.screen_width = screen_width
@@ -58,10 +59,17 @@ class BaseEntity:
 
     def move_left(self,ammount): 
         self.x -= ammount
-
-class Player(BaseEntity):
+    def draw(self): raise NotImplementedError()
+class CircleEntity(BaseEntity):
     def __init__(self,x,y,radius,color):
         BaseEntity.__init__(self,x,y,radius,color)
+
+
+class Player(CircleEntity):
+    def __init__(self,x,y,radius,color):
+        CircleEntity.__init__(self,x,y,radius,color)
+    def draw(self,screen):
+        pygame.draw.circle(screen, BLACK, [self.x,self.y], self.radius)
     
     def handle_event(self,event):
         if event.type == KEYDOWN:
@@ -74,10 +82,9 @@ class Player(BaseEntity):
             if event.key == K_LEFT:
                 self.move_left(10)
 
-    def draw(self,screen):
-        pygame.draw.circle(screen, BLACK, [self.x,self.y], self.radius)
+    
 
 app = Application(600,600)
-app.setCaption("Example py1.1")
+app.setCaption("Example main.py")
 app.run()
 
