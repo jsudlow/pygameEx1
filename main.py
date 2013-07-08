@@ -60,9 +60,11 @@ class BaseEntity:
     def move_left(self,ammount): 
         self.x -= ammount
     def draw(self): raise NotImplementedError()
+
+
 class CircleEntity(BaseEntity):
     def __init__(self,x,y,radius,color):
-        BaseEntity.__init__(self,x,y,radius,color)
+        super(BaseEntity).__init__(x,y,color)
 
 
 class Player(CircleEntity):
