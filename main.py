@@ -116,6 +116,7 @@ class Application:
         )
 
         self.entities = []
+        pygame.key.set_repeat(10,40)
         self.spawn_enemy(400, 400)
             
     def spawn_enemy(self, x, y):
