@@ -18,11 +18,20 @@ class Application:
             self.screen_width,
             self.screen_height,
         ])
+        
         self.player = Player(
             200, 200,
             CircleEntity(40, BLACK),
         )
+
+        self.enemey = Enemey(
+            400,400,
+            SquareEntity(40,GREEN),
+            self
+            )
+        
         self.entities = []
+        self.entities.append(self.enemey)
             
     def setCaption(self,caption):
         pygame.display.set_caption(caption)
@@ -39,6 +48,7 @@ class Application:
         for e in self.entities:
             e.draw(self.screen)
         self.player.draw(self.screen)
+        
 
         pygame.display.flip()
     
@@ -102,6 +112,21 @@ class Player(BaseEntity):
             if event.key == K_LEFT:
                 self.move_left(10)
 
+class Enemey(BaseEntity):
+    def __init__(self,sprite,x,y,app):
+        super(Enemey,self).__init__(sprite,x,y)
+        self.app = app
+        
+    def update(self,dt,time):
+        if self.x > self.app.player.x:
+            self.move_left(10)
+        else:
+            self.move_right(10)
+        if self.y > self.app.player.y:
+            self.move_up(10)
+        else:
+            self.move_down(10)
+        
 class Sprite(object):
     def __init__(self, color):
         self.color = color
