@@ -63,16 +63,22 @@ class BaseEntity(object):
 
 class CircleEntity(BaseEntity):
     def __init__(self,x,y,radius,color):
-        super(BaseEntity,self).__init__(x,y,color)
+        super(CircleEntity,self).__init__(x,y,color)
         self.radius = radius
+    def draw(self,screen):
+        pygame.draw.circle(screen, self.color, [self.x,self.y], self.radius)
 
+class SquareEntity(BaseEntity):
+    def __init__(self,x,y,side_length,color):
+        super(SquareEntity,self).__init__(x,y,color)
+        self.side_length = side_length
+    def draw(self,screen):
+        pygame.draw.rect(screen, self.color, [75, 10, 50, 20], 2)
 
 class Player(CircleEntity):
     def __init__(self,x,y,radius,color):
         super(Player,self).__init__(x,y,radius,color)
-    def draw(self,screen):
-        pygame.draw.circle(screen, BLACK, [self.x,self.y], self.radius)
-    
+        
     def handle_event(self,event):
         if event.type == KEYDOWN:
             if event.key == K_DOWN:
