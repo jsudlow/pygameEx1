@@ -44,22 +44,24 @@ class Application:
 
 class BaseEntity(object):
     def __init__(self,sprite):
+        self.sprite = sprite
         self.x = sprite.x
         self.y = sprite.y
         self.color = sprite.color
         
     def move_down(self,ammount):
-        self.y += ammount
+        self.sprite.y += ammount
 
     def move_up(self,ammount):
-        self.y -= ammount
+        self.sprite.y -= ammount
 
     def move_right(self,ammount):
-        self.x += ammount
+        self.sprite.x += ammount
 
     def move_left(self,ammount): 
-        self.x -= ammount
-    def draw(self): raise NotImplementedError()
+        self.sprite.x -= ammount
+    def draw(self,screen):
+        self.sprite.draw(screen,self.x, self.y)
 
 class Player(BaseEntity):
     def __init__(self,sprite):
@@ -77,7 +79,7 @@ class Player(BaseEntity):
                 self.move_left(10)
 
 class Sprite(object):
-    def _init__(self,x,y,color):
+    def __init__(self,x,y,color):
         self.x = x
         self.y = y
         self.color = color
@@ -86,7 +88,7 @@ class CircleEntity(Sprite):
     def __init__(self,x,y,radius,color):
         super(CircleEntity,self).__init__(x,y,color)
         self.radius = radius
-    def draw(self,screen):
+    def draw(self,screen,x,y):
         pygame.draw.circle(screen, self.color, [self.x,self.y], self.radius)
 
 class SquareEntity(Sprite):
