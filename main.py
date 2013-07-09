@@ -41,11 +41,10 @@ class Application:
             self.draw_screen()
               
 
-class BaseEntity:
-    def __init__(self,x,y,radius,color):
+class BaseEntity(object):
+    def __init__(self,x,y,color):
         self.x = x
         self.y = y
-        self.radius = radius
         self.color = color
         
     def move_down(self,ammount):
@@ -64,12 +63,13 @@ class BaseEntity:
 
 class CircleEntity(BaseEntity):
     def __init__(self,x,y,radius,color):
-        super(BaseEntity).__init__(x,y,color)
+        super(BaseEntity,self).__init__(x,y,color)
+        self.radius = radius
 
 
 class Player(CircleEntity):
     def __init__(self,x,y,radius,color):
-        CircleEntity.__init__(self,x,y,radius,color)
+        super(CircleEntity,self).__init__(x,y,radius,color)
     def draw(self,screen):
         pygame.draw.circle(screen, BLACK, [self.x,self.y], self.radius)
     
