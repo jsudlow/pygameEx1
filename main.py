@@ -16,7 +16,8 @@ class Application:
         self.screen_height = screen_height
         self.screen = pygame.display.set_mode([self.screen_width,self.screen_height])
         circle_sprite = CircleEntity(40,BLACK)
-        self.player = Player(circle_sprite)
+        square_sprite = SquareEntity(40, GREEN)
+        self.player = Player(square_sprite)
             
     def setCaption(self,caption):
         pygame.display.set_caption(caption)
@@ -45,26 +46,20 @@ class Application:
 class BaseEntity(object):
     def __init__(self,sprite):
         self.sprite = sprite
-        if not hasattr(sprite, 'x'):
-            sprite.x = 400
-        if not hasattr(sprite, 'y'):
-            sprite.y = 400
-            
-        self.x = sprite.x
-        self.y = sprite.y
-        self.color = sprite.color
-        
+        self.x = 200
+        self.y = 200
+      
     def move_down(self,ammount):
-        self.sprite.y += ammount
+        self.y += ammount
 
     def move_up(self,ammount):
-        self.sprite.y -= ammount
+        self.y -= ammount
 
     def move_right(self,ammount):
-        self.sprite.x += ammount
+        self.x += ammount
 
     def move_left(self,ammount): 
-        self.sprite.x -= ammount
+        self.x -= ammount
     def draw(self,screen):
         self.sprite.draw(screen,self.x, self.y)
 
@@ -91,15 +86,15 @@ class CircleEntity(Sprite):
     def __init__(self,radius,color):
         super(CircleEntity,self).__init__(color)
         self.radius = radius
-    def draw(self,screen,x,y):
-        pygame.draw.circle(screen, self.color, [self.x,self.y], self.radius)
+    def draw(self,screen,x,y):  
+        pygame.draw.circle(screen, self.color, [x,y], self.radius)
 
 class SquareEntity(Sprite):
-    def __init__(self,x,y,side_length,color):
-        super(SquareEntity,self).__init__(x,y,color)
+    def __init__(self,side_length,color):
+        super(SquareEntity,self).__init__(color)
         self.side_length = side_length
-    def draw(self,screen):
-        pygame.draw.rect(screen, self.color, [75, 10, 50, 20], 2)
+    def draw(self,screen,x,y):
+        pygame.draw.rect(screen, self.color, [x, y, x,y], 2)
 
 
 
