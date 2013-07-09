@@ -17,7 +17,7 @@ class Application:
         self.screen = pygame.display.set_mode([self.screen_width,self.screen_height])
         circle_sprite = CircleEntity(40,BLACK)
         square_sprite = SquareEntity(40, GREEN)
-        self.player = Player(square_sprite)
+        self.player = Player(circle_sprite,200,200)
             
     def setCaption(self,caption):
         pygame.display.set_caption(caption)
@@ -44,11 +44,10 @@ class Application:
               
 
 class BaseEntity(object):
-    def __init__(self,sprite):
+    def __init__(self,sprite,x,y):
         self.sprite = sprite
-        self.x = 200
-        self.y = 200
-      
+        self.x = x
+        self.y = y      
     def move_down(self,ammount):
         self.y += ammount
 
@@ -64,8 +63,9 @@ class BaseEntity(object):
         self.sprite.draw(screen,self.x, self.y)
 
 class Player(BaseEntity):
-    def __init__(self,sprite):
-        super(Player,self).__init__(sprite)
+    def __init__(self,sprite,x,y):
+        super(Player,self).__init__(sprite,x,y)
+
         
     def handle_event(self,event):
         if event.type == KEYDOWN:
