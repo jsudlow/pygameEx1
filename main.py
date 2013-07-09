@@ -76,21 +76,17 @@ class Player(BaseEntity):
     default_sprite = CircleSprite(40, BLACK)
 
     def handle_event(self,event):
-        if event.type == KEYDOWN:
-            if event.key == K_DOWN:
+        if self.app.keys:
+            if self.app.keys[K_DOWN]:
                 self.move_down(10)
-            if event.key == K_UP:
+            if self.app.keys[K_UP]:
                 self.move_up(10)
-            if event.key == K_RIGHT:
+            if self.app.keys[K_RIGHT]:
                 self.move_right(10)
-            if event.key == K_LEFT:
+            if self.app.keys == [K_LEFT]:
                 self.move_left(10)
-        if self.app.keys[K_LEFT]:
-            self.move_left(10)
-
-
-
-
+        
+        
 class Enemy(BaseEntity):
 
     default_sprite = SquareSprite(40, GREEN)
