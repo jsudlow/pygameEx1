@@ -15,7 +15,8 @@ class Application:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.screen = pygame.display.set_mode([self.screen_width,self.screen_height])
-        self.player = Player(400,400,40,BLACK)
+        circle_sprite = CircleEntity(400,400,40,BLACK)
+        self.player = Player(circle_sprite)
             
     def setCaption(self,caption):
         pygame.display.set_caption(caption)
@@ -42,10 +43,10 @@ class Application:
               
 
 class BaseEntity(object):
-    def __init__(self,x,y,color):
-        self.x = x
-        self.y = y
-        self.color = color
+    def __init__(self,sprite):
+        self.x = sprite.x
+        self.y = sprite.y
+        self.color = sprite.color
         
     def move_down(self,ammount):
         self.y += ammount
@@ -60,24 +61,9 @@ class BaseEntity(object):
         self.x -= ammount
     def draw(self): raise NotImplementedError()
 
-
-class CircleEntity(BaseEntity):
-    def __init__(self,x,y,radius,color):
-        super(CircleEntity,self).__init__(x,y,color)
-        self.radius = radius
-    def draw(self,screen):
-        pygame.draw.circle(screen, self.color, [self.x,self.y], self.radius)
-
-class SquareEntity(BaseEntity):
-    def __init__(self,x,y,side_length,color):
-        super(SquareEntity,self).__init__(x,y,color)
-        self.side_length = side_length
-    def draw(self,screen):
-        pygame.draw.rect(screen, self.color, [75, 10, 50, 20], 2)
-
-class Player(CircleEntity):
-    def __init__(self,x,y,radius,color):
-        super(Player,self).__init__(x,y,radius,color)
+class Player(BaseEntity):
+    def __init__(self,sprite):
+        super(Player,self).__init__(sprite)
         
     def handle_event(self,event):
         if event.type == KEYDOWN:
@@ -89,6 +75,28 @@ class Player(CircleEntity):
                 self.move_right(10)
             if event.key == K_LEFT:
                 self.move_left(10)
+
+class Sprite(object):
+    def _init__(self,x,y,color):
+        self.x = x
+        self.y = y
+        self.color = color
+
+class CircleEntity(Sprite):
+    def __init__(self,x,y,radius,color):
+        super(CircleEntity,self).__init__(x,y,color)
+        self.radius = radius
+    def draw(self,screen):
+        pygame.draw.circle(screen, self.color, [self.x,self.y], self.radius)
+
+class SquareEntity(Sprite):
+    def __init__(self,x,y,side_length,color):
+        super(SquareEntity,self).__init__(x,y,color)
+        self.side_length = side_length
+    def draw(self,screen):
+        pygame.draw.rect(screen, self.color, [75, 10, 50, 20], 2)
+
+
 
     
 
