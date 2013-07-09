@@ -69,7 +69,7 @@ class CircleEntity(BaseEntity):
 
 class Player(CircleEntity):
     def __init__(self,x,y,radius,color):
-        super(CircleEntity,self).__init__(x,y,radius,color)
+        super(Player,self).__init__(x,y,radius,color)
     def draw(self,screen):
         pygame.draw.circle(screen, BLACK, [self.x,self.y], self.radius)
     
