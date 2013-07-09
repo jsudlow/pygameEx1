@@ -94,7 +94,7 @@ class SquareEntity(Sprite):
         super(SquareEntity,self).__init__(color)
         self.side_length = side_length
     def draw(self,screen,x,y):
-        pygame.draw.rect(screen, self.color, [x, y, x,y], 2)
+        pygame.draw.rect(screen, self.color, [x, y, self.side_length, self.side_length], 2)
 
 
 
