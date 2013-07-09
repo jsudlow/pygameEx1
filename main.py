@@ -85,6 +85,10 @@ class Player(BaseEntity):
                 self.move_right(10)
             if event.key == K_LEFT:
                 self.move_left(10)
+        if self.app.keys[K_LEFT]:
+            self.move_left(10)
+
+
 
 
 class Enemy(BaseEntity):
@@ -116,8 +120,10 @@ class Application:
         )
 
         self.entities = []
-        pygame.key.set_repeat(10,40)
         self.spawn_enemy(400, 400)
+    def get_keys(self):
+        self.keys = keys = pygame.key.get_pressed()
+
             
     def spawn_enemy(self, x, y):
         self.entities.append(
@@ -161,6 +167,7 @@ class Application:
             dt = clock.tick(10)
             time += dt
 
+            self.get_keys()
             self.handle_events()     
             self.update_entities(dt, time)
             self.draw_screen()
