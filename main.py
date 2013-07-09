@@ -11,61 +11,85 @@ GREEN = (  0, 255,   0)
 RED =   (255,   0,   0)
 
 class Application:
-    def __init__(self,screen_width,screen_height):
+    def __init__(self, screen_width, screen_height):
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.screen = pygame.display.set_mode([self.screen_width,self.screen_height])
-        circle_sprite = CircleEntity(40,BLACK)
-        square_sprite = SquareEntity(40, GREEN)
-        self.player = Player(circle_sprite,200,200)
+        self.screen = pygame.display.set_mode([
+            self.screen_width,
+            self.screen_height,
+        ])
+        self.player = Player(
+            200, 200,
+            CircleEntity(40, BLACK),
+        )
+        self.entities = []
             
     def setCaption(self,caption):
         pygame.display.set_caption(caption)
 
+    def update_entities(self, dt, time):
+        for e in self.entities:
+            e.update(dt, time)
+
+        self.player.update(dt, time)
+
     def draw_screen(self):
         self.screen.fill(WHITE)
+
+        for e in self.entities:
+            e.draw(self.screen)
         self.player.draw(self.screen)
+
         pygame.display.flip()
     
     def handle_events(self):
-        for event in pygame.event.get(): # User did something
-            if event.type == pygame.QUIT: # If user clicked close
-                self.done=True # Flag that we are done so we exit this loop
+        for event in pygame.event.get(): 
+            # User did something
+            if event.type == pygame.QUIT: 
+                # If user clicked close
+                # Flag that we are done so we exit this loop
+                self.done=True 
             self.player.handle_event(event)
 
     def run(self):
-        self.done = False
+        time = 0
         clock = pygame.time.Clock()
               
+        self.done = False
         while not self.done:
-            clock.tick(10)
+            dt = clock.tick(10)
+            time += dt
+
             self.handle_events()     
+            self.update_entities(dt, time)
             self.draw_screen()
               
-
 class BaseEntity(object):
-    def __init__(self,sprite,x,y):
-        self.sprite = sprite
+    def __init__(self, x, y, sprite):
         self.x = x
         self.y = y      
-    def move_down(self,ammount):
-        self.y += ammount
+        self.sprite = sprite
 
-    def move_up(self,ammount):
-        self.y -= ammount
+    def move_down(self, amount):
+        self.y += amount
 
-    def move_right(self,ammount):
-        self.x += ammount
+    def move_up(self, amount):
+        self.y -= amount
 
-    def move_left(self,ammount): 
-        self.x -= ammount
+    def move_right(self, amount):
+        self.x += amount
+
+    def move_left(self, amount): 
+        self.x -= amount
+
+    def update(self, dt, time): pass
+
     def draw(self,screen):
         self.sprite.draw(screen,self.x, self.y)
 
 class Player(BaseEntity):
     def __init__(self,sprite,x,y):
         super(Player,self).__init__(sprite,x,y)
-
         
     def handle_event(self,event):
         if event.type == KEYDOWN:
@@ -79,25 +103,32 @@ class Player(BaseEntity):
                 self.move_left(10)
 
 class Sprite(object):
-    def __init__(self,color):
+    def __init__(self, color):
         self.color = color
 
 class CircleEntity(Sprite):
-    def __init__(self,radius,color):
-        super(CircleEntity,self).__init__(color)
+    def __init__(self, radius, color):
+        super(CircleEntity, self).__init__(color)
         self.radius = radius
-    def draw(self,screen,x,y):  
-        pygame.draw.circle(screen, self.color, [x,y], self.radius)
+    def draw(self, screen, x, y):  
+        pygame.draw.circle(
+            screen, 
+            self.color, 
+            [x,y], 
+            self.radius,
+        )
 
 class SquareEntity(Sprite):
     def __init__(self,side_length,color):
         super(SquareEntity,self).__init__(color)
         self.side_length = side_length
     def draw(self,screen,x,y):
-        pygame.draw.rect(screen, self.color, [x, y, self.side_length, self.side_length], 2)
-
-
-
+        pygame.draw.rect(
+            screen, 
+            self.color, 
+            [x, y, self.side_length, self.side_length], 
+            2,
+        )
     
 
 app = Application(600,600)
