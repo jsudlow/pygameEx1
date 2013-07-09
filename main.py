@@ -73,36 +73,42 @@ class BaseEntity(object):
 
 class Player(BaseEntity):
 
+    speed = 1
     default_sprite = CircleSprite(40, BLACK)
 
-    def handle_event(self,event):
-        if self.app.keys:
-            if self.app.keys[K_DOWN]:
-                self.move_down(10)
-            if self.app.keys[K_UP]:
-                self.move_up(10)
-            if self.app.keys[K_RIGHT]:
-                self.move_right(10)
-            if self.app.keys == [K_LEFT]:
-                self.move_left(10)
+    def update(self, dt, time):
+        amt = self.speed * dt
+        if self.app.keys[K_DOWN]:
+            self.move_down(10)
+        if self.app.keys[K_UP]:
+            self.move_up(10)
+        if self.app.keys[K_RIGHT]:
+            self.move_right(10)
+        if self.app.keys[K_LEFT]:
+            self.move_left(10)
         
         
 class Enemy(BaseEntity):
 
+    speed = .01
     default_sprite = SquareSprite(40, GREEN)
         
     def update(self, dt, time):
+        amt = self.speed * dt
         if self.x > self.app.player.x:
-            self.move_left(10)
+            self.move_left(amt)
         else:
-            self.move_right(10)
+            self.move_right(amt)
         if self.y > self.app.player.y:
-            self.move_up(10)
+            self.move_up(amt)
         else:
-            self.move_down(10)
+            self.move_down(amt)
         
 
 class Application:
+
+    fps = 30
+
     def __init__(self, screen_width, screen_height):
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -152,7 +158,6 @@ class Application:
                 # If user clicked close
                 # Flag that we are done so we exit this loop
                 self.done=True 
-            self.player.handle_event(event)
 
     def run(self):
         time = 0
@@ -160,7 +165,7 @@ class Application:
               
         self.done = False
         while not self.done:
-            dt = clock.tick(10)
+            dt = clock.tick(self.fps)
             time += dt
 
             self.get_keys()
