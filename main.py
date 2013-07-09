@@ -15,7 +15,7 @@ class Application:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.screen = pygame.display.set_mode([self.screen_width,self.screen_height])
-        circle_sprite = CircleEntity(400,400,40,BLACK)
+        circle_sprite = CircleEntity(40,BLACK)
         self.player = Player(circle_sprite)
             
     def setCaption(self,caption):
@@ -45,6 +45,11 @@ class Application:
 class BaseEntity(object):
     def __init__(self,sprite):
         self.sprite = sprite
+        if not hasattr(sprite, 'x'):
+            sprite.x = 400
+        if not hasattr(sprite, 'y'):
+            sprite.y = 400
+            
         self.x = sprite.x
         self.y = sprite.y
         self.color = sprite.color
@@ -79,14 +84,12 @@ class Player(BaseEntity):
                 self.move_left(10)
 
 class Sprite(object):
-    def __init__(self,x,y,color):
-        self.x = x
-        self.y = y
+    def __init__(self,color):
         self.color = color
 
 class CircleEntity(Sprite):
-    def __init__(self,x,y,radius,color):
-        super(CircleEntity,self).__init__(x,y,color)
+    def __init__(self,radius,color):
+        super(CircleEntity,self).__init__(color)
         self.radius = radius
     def draw(self,screen,x,y):
         pygame.draw.circle(screen, self.color, [self.x,self.y], self.radius)
