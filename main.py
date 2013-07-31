@@ -2,6 +2,7 @@
 import pygame
 from math import pi
 from pygame.locals import *
+import random
 
 pygame.init()
 BLACK = (  0,   0,   0)
@@ -74,7 +75,7 @@ class BaseEntity(object):
 class Player(BaseEntity):
 
     speed = 1
-    default_sprite = CircleSprite(40, BLACK)
+    default_sprite = CircleSprite(20, BLACK)
 
     def update(self, dt, time):
         amt = self.speed * dt
@@ -103,6 +104,7 @@ class Enemy(BaseEntity):
             self.move_up(amt)
         else:
             self.move_down(amt)
+
         
 
 class Application:
@@ -123,6 +125,13 @@ class Application:
 
         self.entities = []
         self.spawn_enemy(400, 400)
+    def collision_detection(self):
+        player_rect = Rect(self.player.x,self.player.y,40,40)
+        for ents in self.entities:
+            ents_rect = Rect(ents.x,ents.y,20,20)
+            if ents_rect.colliderect(player_rect):
+                self.spawn_enemy(random.randint(1,400), random.randint(1,400))
+
     def get_keys(self):
         self.keys = keys = pygame.key.get_pressed()
 
@@ -138,6 +147,7 @@ class Application:
     def update_entities(self, dt, time):
         for e in self.entities:
             e.update(dt, time)
+            
 
         self.player.update(dt, time)
 
@@ -158,6 +168,7 @@ class Application:
                 # If user clicked close
                 # Flag that we are done so we exit this loop
                 self.done=True 
+        self.collision_detection()
 
     def run(self):
         time = 0
