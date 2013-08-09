@@ -1,6 +1,7 @@
 # Import a library of functions called 'pygame'
 import pygame
 from math import pi
+import math
 from pygame.locals import *
 import random
 
@@ -38,6 +39,7 @@ class SquareSprite(Sprite):
             [x, y, self.side_length, self.side_length], 
             2,
         )
+
     
 
 class BaseEntity(object):
@@ -126,10 +128,32 @@ class Application:
         self.entities = []
         self.spawn_enemy(400, 400)
     def collision_detection(self):
-        player_rect = Rect(self.player.x,self.player.y,40,40)
+        player_x = self.player.x
+        player_y = self.player.y
         for ents in self.entities:
-            ents_rect = Rect(ents.x,ents.y,20,20)
-            if ents_rect.colliderect(player_rect):
+            #ents x,y
+            enemy_x = ents.x
+            enemy_y = ents.y
+            #detect if enemy is coliding with the player
+            cx = abs(self.player.x - (enemy_x + ents.sprite.side_length / 2.0))
+            cy = abs(self.player.y - (enemy_y + ents.sprite.side_length / 2.0))
+
+            #detect some edge cases
+            if cx > (ents.sprite.side_length/2.0 + self.player.sprite.radius):
+                continue
+            if cy > (ents.sprite.side_length/2.0 + self.player.sprite.radius):
+                continue
+            if cx <= ents.sprite.side_length/2.0:
+                self.spawn_enemy(random.randint(1,400), random.randint(1,400))
+                continue
+            if cy <= ents.sprite.side_length/2.0:
+                self.spawn_enemy(random.randint(1,400), random.randint(1,400))
+                continue
+
+            #detect the corner distance squared
+            corner_dist = (cx - ents.sprite.side_length/2.0) ** 2 + (cy - ents.sprite.side_length/2.0) ** 2
+          
+            if corner_dist <= self.player.sprite.radius ** 2:
                 self.spawn_enemy(random.randint(1,400), random.randint(1,400))
 
     def get_keys(self):
